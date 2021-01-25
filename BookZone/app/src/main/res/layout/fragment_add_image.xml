@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/imageView_close_fragment"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_close"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:id="@+id/title_Fragment_add_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adaugare carte"
+        android:textColor="@color/title_color"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/editText_book_title"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:hint="Titlul cartii"
+        android:layout_below="@id/title_Fragment_add_image"
+        android:layout_centerHorizontal="true"
+        android:inputType="text"
+        android:maxLines="1"/>
+
+    <ImageView
+        android:id="@+id/imageButton_load_image"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_below="@id/editText_book_title"
+        android:background="@color/grey"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/button_save_image_in_db"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="Salveaza"
+        android:layout_below="@id/imageButton_load_image"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
