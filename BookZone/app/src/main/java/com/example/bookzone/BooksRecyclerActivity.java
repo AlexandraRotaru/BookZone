@@ -83,9 +83,9 @@ public class BooksRecyclerActivity extends AppCompatActivity {
                 LoadImageFragment loadImageFragment = new LoadImageFragment();
 
                 getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.frameLayout_fragment_load_image, loadImageFragment)
-                            .commit();
+                        .beginTransaction()
+                        .replace(R.id.frameLayout_fragment_load_image, loadImageFragment)
+                        .commit();
 
             }
         });

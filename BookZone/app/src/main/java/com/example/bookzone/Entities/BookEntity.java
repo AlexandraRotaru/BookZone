@@ -1,10 +1,13 @@
 //package com.example.bookzone.Entities;
 //
-//import android.widget.ImageView;
+//import android.net.Uri;
 //
 //import androidx.room.ColumnInfo;
 //import androidx.room.Entity;
 //import androidx.room.PrimaryKey;
+//import androidx.room.TypeConverters;
+//
+//import com.example.bookzone.Utils.DateConverter;
 //
 //@Entity(tableName = "Books")
 //public class BookEntity {
@@ -19,13 +22,14 @@
 //    @ColumnInfo(name = "picturesNumber")
 //    private int picturesNumber;
 //
-////    @ColumnInfo(name = "picture")
-////    private ImageView imageOfBook;
+//    @ColumnInfo(name = "picture")
+//    @TypeConverters(DateConverter.class)
+//    private Uri uriPath;
 //
-//    public BookEntity(String bookName) {
+//    public BookEntity(String bookName, Uri uriPath) {
 //        this.bookName = bookName;
 //        this.picturesNumber = 0;
-////        this.imageOfBook = imageOfBook;
+//        this.uriPath = uriPath;
 //    }
 //
 //    public int getBookId() {
@@ -52,11 +56,11 @@
 //        this.picturesNumber = picturesNumber;
 //    }
 //
-////    public ImageView getImageOfBook() {
-////        return imageOfBook;
-////    }
-////
-////    public void setImageOfBook(ImageView imageOfBook) {
-////        this.imageOfBook = imageOfBook;
-////    }
+//    public Uri getUriPath() {
+//        return uriPath;
+//    }
+//
+//    public void setUriPath(Uri uriPath) {
+//        this.uriPath = uriPath;
+//    }
 //}
