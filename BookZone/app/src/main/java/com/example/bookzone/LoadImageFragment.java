@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.bookzone.Adapters.BookRecyclerViewAdapter;
 import com.example.bookzone.Dao.BookDao;
 import com.example.bookzone.Entities.BookEntity;
 
@@ -92,8 +93,9 @@ public class LoadImageFragment extends Fragment {
 
                             BookEntity bookEntity = bookDao.getBook(titleForBook);
 
-                            if(bookEntity == null) {
-                                bookDao.insertBook(new BookEntity(titleForBook, contentUri));
+                            if(bookEntity == null && !titleForBook.isEmpty()) {
+                                BookEntity book = new BookEntity(titleForBook, contentUri);
+                                bookDao.insertBook(book);
                             }
 
                         } catch (

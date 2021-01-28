@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookzone.Entities.BookEntity;
 import com.example.bookzone.R;
+import com.example.bookzone.Utils.ItemListener;
 
 
 import java.util.List;
@@ -20,17 +21,19 @@ import java.util.List;
 public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerViewAdapter.BookRecyclerViewHolder> {
     private List<BookEntity> books;
     private LayoutInflater layoutInflater;
+    private ItemListener listener;
 
-    public BookRecyclerViewAdapter(Context context, List<BookEntity> books) {
+    public BookRecyclerViewAdapter(Context context, List<BookEntity> books, ItemListener listener) {
         layoutInflater = LayoutInflater.from(context);
         this.books = books;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public BookRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.book_item, parent, false);
-        return new BookRecyclerViewHolder(view);
+        return new BookRecyclerViewHolder(view, listener);
     }
 
     @Override
@@ -44,12 +47,16 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
         return books.size();
     }
 
-    public class BookRecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class BookRecyclerViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
         private ImageView bookImage;
         private TextView bookTitle;
+        private ItemListener listener;
 
-        public BookRecyclerViewHolder(@NonNull View itemView) {
+        public BookRecyclerViewHolder(@NonNull View itemView, ItemListener listener) {
             super(itemView);
+
+            this.listener = listener;
+            itemView.setOnClickListener(this);
 
             bookImage = itemView.findViewById(R.id.book_image);
             bookTitle = itemView.findViewById(R.id.book_title);
@@ -58,6 +65,11 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
         public void updateData(Uri image, String title) {
             bookImage.setImageURI(image);
             bookTitle.setText(title);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onItemListener(getAdapterPosition());
         }
     }
 }

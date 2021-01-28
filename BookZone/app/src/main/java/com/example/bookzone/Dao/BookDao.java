@@ -18,6 +18,9 @@ public interface BookDao {
     @Query("SELECT * FROM Books WHERE name = :title")
     BookEntity getBook(String title);
 
+    @Query("SELECT COUNT(*) FROM Books")
+    int picturesNumber();
+
     @Insert
     void insertBook(BookEntity book);
 }

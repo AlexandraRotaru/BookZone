@@ -4,12 +4,13 @@ import android.net.Uri;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.bookzone.Utils.DateConverter;
 
-@Entity(tableName = "Books")
+@Entity(tableName = "Books", indices = {@Index(value = {"name"}, unique = true)})
 public class BookEntity {
 
     @PrimaryKey(autoGenerate = true)
