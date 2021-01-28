@@ -18,14 +18,9 @@ public class UserEntity {
     @ColumnInfo(name = "lastname")
     private String lastname;
 
-    @ColumnInfo(name = "pictures")
-    private int picturesNumber;
-
-
     public UserEntity(String firstname, String lastname) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.picturesNumber = 0;
     }
 
     public int getUserId() {
@@ -50,13 +45,5 @@ public class UserEntity {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public int getPicturesNumber() {
-        return picturesNumber;
-    }
-
-    public void setPicturesNumber(int picturesNumber) {
-        this.picturesNumber = picturesNumber;
     }
 }

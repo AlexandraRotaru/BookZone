@@ -1,18 +1,22 @@
 package com.example.bookzone;
 
-import android.app.MediaRouteButton;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookzone.Dao.UserDao;
-import com.example.bookzone.Entities.UserEntity;
+import com.example.bookzone.Adapters.BookRecyclerViewAdapter;
+import com.example.bookzone.Dao.BookDao;
+import com.example.bookzone.Entities.BookEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BooksRecyclerActivity extends AppCompatActivity {
@@ -23,12 +27,16 @@ public class BooksRecyclerActivity extends AppCompatActivity {
 
     private String firstname;
     private String lastname;
-    private int numberOfPictures;
+    private int numberOfPictures = 0;
+
+    private List<BookEntity> allBooks;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books_recycler);
+
+        recyclerViewSets();
 
         init();
     }
@@ -41,8 +49,6 @@ public class BooksRecyclerActivity extends AppCompatActivity {
         String title = firstname + " " + lastname;
         titleFragment.setText(title);
 
-        getTotalNumberOfPictures();
-
         TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
         String subtitle = "Numar total de poze: " + numberOfPictures;
         subtitleFragment.setText(subtitle);
@@ -51,28 +57,45 @@ public class BooksRecyclerActivity extends AppCompatActivity {
         addBookMethod();
     }
 
-    private void getTotalNumberOfPictures() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
-                    UserDao userDao = db.userDao();
-                    UserEntity userEntity = userDao.getUser(firstname, lastname);
-                    numberOfPictures = userEntity.getPicturesNumber();
+    public void recyclerViewSets() {
+        getBooksFromDB();
 
-                } catch (Exception e) {
-                    throwToastMessage();
-                }
-            }
-        };
+        RecyclerView bookRecyclerView = findViewById(R.id.recyclerView_books);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
+        BookRecyclerViewAdapter adapter = new BookRecyclerViewAdapter(this, allBooks);
 
-        thread.start();
+        bookRecyclerView.setLayoutManager(layoutManager);
+        bookRecyclerView.setAdapter(adapter);
     }
 
-    private void throwToastMessage() {
-        Toast.makeText(getApplicationContext(), "A intervenit o eroare. Incercati mai tarziu", Toast.LENGTH_SHORT).show();
+
+    public void getBooksFromDB() {
+        allBooks = new ArrayList<>();
+
+        BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
+        BookDao bookDao = db.bookDao();
+
+        allBooks = bookDao.getAllBooks();
+
+//
+//        Thread thread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
+//                    BookDao bookDao = db.bookDao();
+//
+//                    allBooks = bookDao.getAllBooks();
+//
+//                } catch (Exception e) {
+//                    throw e;
+//                }
+//            }
+//        };
+//
+//        thread.start();
     }
+
 
     private void addBookMethod() {
         add_book.setOnClickListener(new View.OnClickListener() {

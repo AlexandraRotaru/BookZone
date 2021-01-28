@@ -4,9 +4,9 @@
     package="com.example.bookzone">
 
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
