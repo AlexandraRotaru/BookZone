@@ -7,18 +7,24 @@
 
     <fragment
         android:id="@+id/bookInformationsFragment"
-        android:name="com.example.bookzone.UserInfoFragment"
+        android:name="com.example.bookzone.Fragments.UserInfoFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_book_images"
+        android:id="@+id/recyclerView_book_images"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/bookInformationsFragment"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="55dp"/>
+
+    <FrameLayout
+        android:id="@+id/frameLayout_fragment_view_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
     <Button
         android:id="@+id/button_add_image"

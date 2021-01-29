@@ -1,4 +1,4 @@
-package com.example.bookzone;
+package com.example.bookzone.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,13 +8,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookzone.Adapters.BookRecyclerViewAdapter;
+import com.example.bookzone.BookZoneDatabase;
 import com.example.bookzone.Dao.BookDao;
 import com.example.bookzone.Entities.BookEntity;
+import com.example.bookzone.Fragments.LoadImageFragment;
+import com.example.bookzone.R;
 import com.example.bookzone.Utils.ItemListener;
 
 import java.util.ArrayList;
@@ -26,13 +28,11 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     private static final String PREFERENCES_KEY_INPUT_FIRSTNAME = "com.example.bookzone.pref_key.INPUT.FIRSTNAME";
     private static final String PREFERENCES_KEY_INPUT_LASTNAME = "om.example.bookzone.pref_key.INPUT.LASTNAME";
     private static final String KEY_TITLE = "com.example.bookzone.key.title";
-    private static final String KEY_PICTURES_NUMBER = "com.example.bookzone.key.pictures_number";
 
     private static Button add_book;
 
     private String firstname;
     private String lastname;
-    private int numberOfPictures = 0;
 
     private List<BookEntity> allBooks;
 
@@ -56,7 +56,7 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         titleFragment.setText(title);
 
         TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
-        String subtitle = "Numar total de poze: " + getNumberOfPictures();
+        String subtitle = "Numar total de poze: " + allBooks.size();
         subtitleFragment.setText(subtitle);
 
         add_book = findViewById(R.id.button_addBook);
@@ -73,24 +73,6 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         bookRecyclerView.setLayoutManager(layoutManager);
         bookRecyclerView.setAdapter(adapter);
     }
-
-    public int getNumberOfPictures() {
-//        Thread thread = new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-        BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
-        BookDao bookDao = db.bookDao();
-        return bookDao.picturesNumber();
-
-//                } catch (Exception e) {
-//                    throw e;
-//                }
-//            }
-//        };
-//        thread.start();
-    }
-
 
     public void getBooksFromDB() {
         allBooks = new ArrayList<>();
@@ -145,7 +127,6 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     public void onItemListener(int position) {
         Intent intent = new Intent(this, BookImagesRecyclerActivity.class);
         intent.putExtra(KEY_TITLE, allBooks.get(position).getBookName());
-        intent.putExtra(KEY_PICTURES_NUMBER, allBooks.get(position).getPicturesNumber());
         startActivity(intent);
     }
 }

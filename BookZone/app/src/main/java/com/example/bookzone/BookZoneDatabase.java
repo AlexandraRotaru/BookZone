@@ -31,7 +31,7 @@ public abstract class BookZoneDatabase extends RoomDatabase {
         if(INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                     BookZoneDatabase.class,
-                    "dbforapp")
+                    "bookzone_db")
                     .allowMainThreadQueries()
                     .build();
         }

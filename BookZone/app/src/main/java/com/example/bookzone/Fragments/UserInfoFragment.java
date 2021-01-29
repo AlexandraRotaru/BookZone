@@ -1,4 +1,4 @@
-package com.example.bookzone;
+package com.example.bookzone.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.bookzone.R;
 
 
 public class UserInfoFragment extends Fragment {

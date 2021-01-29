@@ -23,8 +23,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".BooksRecyclerActivity"/>
-        <activity android:name=".BookImagesRecyclerActivity"/>
+        <activity android:name=".Activities.BooksRecyclerActivity"/>
+        <activity android:name=".Activities.BookImagesRecyclerActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

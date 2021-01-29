@@ -20,16 +20,12 @@ public class BookEntity {
     @ColumnInfo(name = "name")
     private String bookName;
 
-    @ColumnInfo(name = "picturesNumber")
-    private int picturesNumber;
-
     @ColumnInfo(name = "picture")
     @TypeConverters(DateConverter.class)
     private Uri uriPath;
 
     public BookEntity(String bookName, Uri uriPath) {
         this.bookName = bookName;
-        this.picturesNumber = 0;
         this.uriPath = uriPath;
     }
 
@@ -47,14 +43,6 @@ public class BookEntity {
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
-    }
-
-    public int getPicturesNumber() {
-        return picturesNumber;
-    }
-
-    public void setPicturesNumber(int picturesNumber) {
-        this.picturesNumber = picturesNumber;
     }
 
     public Uri getUriPath() {

@@ -1,16 +1,13 @@
-package com.example.bookzone;
+package com.example.bookzone.Fragments;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +23,11 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.bookzone.Adapters.BookRecyclerViewAdapter;
+import com.example.bookzone.Activities.BooksRecyclerActivity;
+import com.example.bookzone.BookZoneDatabase;
 import com.example.bookzone.Dao.BookDao;
 import com.example.bookzone.Entities.BookEntity;
+import com.example.bookzone.R;
 
 import java.io.File;
 import java.io.IOException;
