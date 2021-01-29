@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BookZone">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +25,9 @@
         </activity>
 
         <activity android:name=".Activities.BooksRecyclerActivity"/>
-        <activity android:name=".Activities.BookImagesRecyclerActivity"/>
+
+        <activity android:name=".Activities.BookImagesRecyclerActivity"
+            android:parentActivityName=".Activities.BooksRecyclerActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

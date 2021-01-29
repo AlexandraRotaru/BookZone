@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bookzone.Adapters.BookRecyclerViewAdapter;
 import com.example.bookzone.BookZoneDatabase;
 import com.example.bookzone.Dao.BookDao;
+import com.example.bookzone.Dao.UserDao;
 import com.example.bookzone.Entities.BookEntity;
+import com.example.bookzone.Entities.UserEntity;
 import com.example.bookzone.Fragments.LoadImageFragment;
 import com.example.bookzone.R;
 import com.example.bookzone.Utils.ItemListener;
@@ -25,8 +27,6 @@ import java.util.List;
 
 public class BooksRecyclerActivity extends AppCompatActivity implements ItemListener {
 
-    private static final String PREFERENCES_KEY_INPUT_FIRSTNAME = "com.example.bookzone.pref_key.INPUT.FIRSTNAME";
-    private static final String PREFERENCES_KEY_INPUT_LASTNAME = "om.example.bookzone.pref_key.INPUT.LASTNAME";
     private static final String KEY_TITLE = "com.example.bookzone.key.title";
 
     private static Button add_book;
@@ -48,8 +48,8 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     }
 
     public void init() {
-        firstname = getIntent().getStringExtra(PREFERENCES_KEY_INPUT_FIRSTNAME);
-        lastname = getIntent().getStringExtra(PREFERENCES_KEY_INPUT_LASTNAME);
+
+        getUserData();
 
         TextView titleFragment = findViewById(R.id.textView_titleFragment);
         String title = firstname + " " + lastname;
@@ -61,6 +61,15 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
 
         add_book = findViewById(R.id.button_addBook);
         addBookMethod();
+    }
+
+    public void getUserData() {
+        BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
+        UserDao userDao = db.userDao();
+
+        firstname = userDao.getUser().getFirstname();
+        lastname = userDao.getUser().getLastname();
+
     }
 
     public void recyclerViewSets() {
@@ -81,24 +90,6 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         BookDao bookDao = db.bookDao();
 
         allBooks = bookDao.getAllBooks();
-
-//
-//        Thread thread = new Thread() {
-//            @Override
-//            public void run() {
-//                try {
-//                    BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
-//                    BookDao bookDao = db.bookDao();
-//
-//                    allBooks = bookDao.getAllBooks();
-//
-//                } catch (Exception e) {
-//                    throw e;
-//                }
-//            }
-//        };
-//
-//        thread.start();
     }
 
 
@@ -128,5 +119,10 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         Intent intent = new Intent(this, BookImagesRecyclerActivity.class);
         intent.putExtra(KEY_TITLE, allBooks.get(position).getBookName());
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }

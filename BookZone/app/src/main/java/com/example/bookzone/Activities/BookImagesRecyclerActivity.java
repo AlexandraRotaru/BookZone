@@ -52,6 +52,8 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_images_recycler);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         book_title = getIntent().getStringExtra(KEY_TITLE);
 
         recyclerViewSets();
@@ -59,6 +61,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     }
 
     public void init() {
+
         TextView titleFragment = findViewById(R.id.textView_titleFragment);
         String title = book_title;
         titleFragment.setText(title);

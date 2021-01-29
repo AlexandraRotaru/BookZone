@@ -10,8 +10,8 @@ import com.example.bookzone.Entities.UserEntity;
 @Dao
 public interface UserDao {
 
-    @Query("SELECT * FROM User WHERE firstname = :firstname and lastname = :lastname")
-    UserEntity getUser(String firstname, String lastname);
+    @Query("SELECT * FROM User")
+    UserEntity getUser();
 
     @Insert
     void insertUser(UserEntity user);

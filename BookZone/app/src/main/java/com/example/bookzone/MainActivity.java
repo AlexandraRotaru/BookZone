@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         if(firstname_user_existing.equals("") || lastname_user_existing.equals("")) {
             getUserInformations();
         } else {
-            sendIntentToUserProfileActivity(firstname_user_existing, lastname_user_existing);
+            sendIntentToUserProfileActivity();
         }
     }
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
                     savePreferences();
 
-                    sendIntentToUserProfileActivity(firstname_from_user, lastname_from_user);
+                    sendIntentToUserProfileActivity();
                 }
             }
         });
@@ -94,12 +94,9 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private void sendIntentToUserProfileActivity(String firstname, String lastname) {
+    private void sendIntentToUserProfileActivity() {
 
         Intent intent = new Intent(MainActivity.this, BooksRecyclerActivity.class);
-
-        intent.putExtra(PREFERENCES_KEY_INPUT_FIRSTNAME, firstname);
-        intent.putExtra(PREFERENCES_KEY_INPUT_LASTNAME, lastname);
 
         startActivity(intent);
     }
