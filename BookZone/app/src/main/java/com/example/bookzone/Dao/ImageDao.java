@@ -16,8 +16,8 @@ public interface ImageDao {
     @Query("SELECT * FROM Images WHERE book_title = :title ORDER BY idImage DESC")
     LiveData<List<ImageEntity>> getAllImagesForABook(String title);
 
-    @Query("SELECT * FROM Images WHERE idImage = :position")
-    ImageEntity getImage(int position);
+    @Query("SELECT * FROM (SELECT * FROM Images WHERE book_title = :title ORDER BY idImage DESC LIMIT :position) ORDER BY idImage LIMIT 1")
+    ImageEntity getImage(String title, int position);
 
     @Query("SELECT COUNT(*) FROM Images WHERE book_title = :title")
     int getNumberOfPic(String title);

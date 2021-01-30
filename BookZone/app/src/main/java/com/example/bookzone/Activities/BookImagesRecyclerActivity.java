@@ -196,7 +196,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     }
 
     public Uri getImageForAPosition(int position) {
-        ImageEntity image = db.imageDao().getImage(position + 1);
+        ImageEntity image = db.imageDao().getImage(book_title, position + 1);
 
         return image.getUriPath();
     }
