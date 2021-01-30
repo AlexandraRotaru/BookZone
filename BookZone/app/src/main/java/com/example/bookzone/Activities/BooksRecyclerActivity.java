@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,8 +35,8 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     private String lastname;
 
     private BookZoneDatabase db;
-    public List<BookEntity> allBooks;
 
+    BookRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         titleFragment.setText(title);
 
         TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
-        String subtitle = "Numar total de poze: " + allBooks.size();
+        String subtitle = "Numar total de poze: " + getNumberOfBooks();
         subtitleFragment.setText(subtitle);
 
         add_book = findViewById(R.id.button_addBook);
@@ -78,18 +79,23 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
 
         RecyclerView bookRecyclerView = findViewById(R.id.recyclerView_books);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
-        BookRecyclerViewAdapter adapter = new BookRecyclerViewAdapter(this, allBooks, this);
+        adapter = new BookRecyclerViewAdapter(this);
 
         bookRecyclerView.setLayoutManager(layoutManager);
         bookRecyclerView.setAdapter(adapter);
     }
 
     public void getBooksFromDB() {
-        allBooks = new ArrayList<>();
+        db.bookDao().getAllBooks().observe(this, new Observer<List<BookEntity>>() {
+            @Override
+            public void onChanged(List<BookEntity> bookEntities) {
+                adapter.setBooks(bookEntities);
+            }
+        });
+    }
 
-        BookDao bookDao = db.bookDao();
-
-        allBooks = bookDao.getAllBooks();
+    public int getNumberOfBooks() {
+        return  db.bookDao().numberOfBooks();
     }
 
 
@@ -114,10 +120,14 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         add_book.setVisibility(View.VISIBLE);
     }
 
+    public String getBookTitleForAPosition(int position) {
+        return db.bookDao().getBookByPosition(position + 1).getBookName();
+    }
+
     @Override
     public void onItemListener(int position) {
         Intent intent = new Intent(this, BookImagesRecyclerActivity.class);
-        intent.putExtra(KEY_TITLE, allBooks.get(position).getBookName());
+        intent.putExtra(KEY_TITLE, getBookTitleForAPosition(position));
         startActivity(intent);
     }
 

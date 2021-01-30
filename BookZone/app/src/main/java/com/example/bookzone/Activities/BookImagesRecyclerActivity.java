@@ -74,7 +74,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         titleFragment.setText(title);
 
         TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
-        String subtitle = "Numar total de poze: " + "0";
+        String subtitle = "Numar total de poze: " + getNumberOfPic();
         subtitleFragment.setText(subtitle);
 
         add_Image = findViewById(R.id.button_add_image);
@@ -94,15 +94,18 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     }
 
     public void getImagesFromDB() {
-        ImageDao imageDao = db.imageDao();
-
-        imageDao.getAllImagesForABook(book_title).observe(this, new Observer<List<ImageEntity>>() {
+        db.imageDao().getAllImagesForABook(book_title).observe(this, new Observer<List<ImageEntity>>() {
             @Override
             public void onChanged(List<ImageEntity> imageEntities) {
                 adapter.setImages(imageEntities);
             }
         });
     }
+
+    public int getNumberOfPic() {
+        return db.imageDao().getNumberOfPic(book_title);
+    }
+
 
     public void addImageMethod() {
         add_Image.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +195,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         thread.start();
     }
 
-    public Uri getImageAtPosition(int position) {
+    public Uri getImageForAPosition(int position) {
         ImageEntity image = db.imageDao().getImage(position + 1);
 
         return image.getUriPath();
@@ -202,7 +205,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     public void onItemListener(int position) {
         Bundle bundle = new Bundle();
 
-        bundle.putString("IMAGE_PATH", String.valueOf(getImageAtPosition(position)));
+        bundle.putString("IMAGE_PATH", String.valueOf(getImageForAPosition(position)));
 
         ImageFragment imageFragment = new ImageFragment();
         imageFragment.setArguments(bundle);

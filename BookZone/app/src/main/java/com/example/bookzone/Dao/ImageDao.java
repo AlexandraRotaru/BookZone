@@ -1,6 +1,5 @@
 package com.example.bookzone.Dao;
 
-import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -19,6 +18,9 @@ public interface ImageDao {
 
     @Query("SELECT * FROM Images WHERE idImage = :position")
     ImageEntity getImage(int position);
+
+    @Query("SELECT COUNT(*) FROM Images WHERE book_title = :title")
+    int getNumberOfPic(String title);
 
     @Insert
     void insertImage(ImageEntity image);

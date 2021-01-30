@@ -16,23 +16,22 @@ import com.example.bookzone.R;
 import com.example.bookzone.Utils.ItemListener;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerViewAdapter.BookRecyclerViewHolder> {
     private List<BookEntity> books;
-    private LayoutInflater layoutInflater;
     private ItemListener listener;
 
-    public BookRecyclerViewAdapter(Context context, List<BookEntity> books, ItemListener listener) {
-        layoutInflater = LayoutInflater.from(context);
-        this.books = books;
+    public BookRecyclerViewAdapter(ItemListener listener) {
+        this.books = new ArrayList<>();
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public BookRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.book_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_item, parent, false);
         return new BookRecyclerViewHolder(view, listener);
     }
 
@@ -45,6 +44,11 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
     @Override
     public int getItemCount() {
         return books.size();
+    }
+
+    public void setBooks(List<BookEntity> books) {
+        this.books = books;
+        notifyDataSetChanged();
     }
 
     public class BookRecyclerViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
