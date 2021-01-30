@@ -11,15 +11,11 @@ import java.util.List;
 @Dao
 public interface BookDao {
 
-    @Query("SELECT * FROM Books")
+    @Query("SELECT * FROM Books ORDER BY idBook DESC")
     List<BookEntity> getAllBooks();
-
 
     @Query("SELECT * FROM Books WHERE name = :title")
     BookEntity getBook(String title);
-
-    @Query("SELECT COUNT(*) FROM Books")
-    int picturesNumber();
 
     @Insert
     void insertBook(BookEntity book);

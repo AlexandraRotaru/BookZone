@@ -15,24 +15,23 @@ import com.example.bookzone.R;
 import com.example.bookzone.Entities.ImageEntity;
 import com.example.bookzone.Utils.ItemListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ImageRecyclerViewHolder> {
 
     private List<ImageEntity> allImages;
-    private LayoutInflater layoutInflater;
     private ItemListener listener;
 
-    public ImageRecyclerViewAdapter(Context context, List<ImageEntity> images, ItemListener listener) {
-        layoutInflater = LayoutInflater.from(context);
-        allImages = images;
+    public ImageRecyclerViewAdapter(ItemListener listener) {
+        allImages = new ArrayList<>();
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public ImageRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.image_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);
         return new ImageRecyclerViewHolder(view, listener);
     }
 
@@ -45,6 +44,11 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     @Override
     public int getItemCount() {
         return allImages.size();
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.allImages = images;
+        notifyDataSetChanged();
     }
 
     public class ImageRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

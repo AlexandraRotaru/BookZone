@@ -46,6 +46,8 @@ public class LoadImageFragment extends Fragment {
     private Uri contentUri;
     private Button saveImageToDB;
 
+    private BookEntity book;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
@@ -71,7 +73,11 @@ public class LoadImageFragment extends Fragment {
         closeFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().remove(LoadImageFragment.this).commit();
+                getFragmentManager()
+                        .beginTransaction()
+                        .remove(LoadImageFragment.this)
+                        .commit();
+
                 BooksRecyclerActivity.setAdd_book();
             }
         });
@@ -93,7 +99,7 @@ public class LoadImageFragment extends Fragment {
                             BookEntity bookEntity = bookDao.getBook(titleForBook);
 
                             if(bookEntity == null && !titleForBook.isEmpty()) {
-                                BookEntity book = new BookEntity(titleForBook, contentUri);
+                                book = new BookEntity(titleForBook, contentUri);
                                 bookDao.insertBook(book);
                             }
 

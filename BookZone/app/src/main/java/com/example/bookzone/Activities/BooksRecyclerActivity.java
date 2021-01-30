@@ -16,7 +16,6 @@ import com.example.bookzone.BookZoneDatabase;
 import com.example.bookzone.Dao.BookDao;
 import com.example.bookzone.Dao.UserDao;
 import com.example.bookzone.Entities.BookEntity;
-import com.example.bookzone.Entities.UserEntity;
 import com.example.bookzone.Fragments.LoadImageFragment;
 import com.example.bookzone.R;
 import com.example.bookzone.Utils.ItemListener;
@@ -34,13 +33,16 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     private String firstname;
     private String lastname;
 
-    private List<BookEntity> allBooks;
+    private BookZoneDatabase db;
+    public List<BookEntity> allBooks;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books_recycler);
+
+        db = BookZoneDatabase.getAppDatabase(getApplicationContext());
 
         recyclerViewSets();
 
@@ -64,7 +66,6 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     }
 
     public void getUserData() {
-        BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
         UserDao userDao = db.userDao();
 
         firstname = userDao.getUser().getFirstname();
@@ -86,7 +87,6 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     public void getBooksFromDB() {
         allBooks = new ArrayList<>();
 
-        BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
         BookDao bookDao = db.bookDao();
 
         allBooks = bookDao.getAllBooks();

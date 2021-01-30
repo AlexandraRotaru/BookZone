@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +48,9 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     private Button add_Image;
     private String currentPhotoPath;
     private Uri contentUri;
-    private List<ImageEntity> allImagesForBook;
+    private BookZoneDatabase db;
+
+    ImageRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +60,8 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         book_title = getIntent().getStringExtra(KEY_TITLE);
+
+        db = BookZoneDatabase.getAppDatabase(getApplicationContext());
 
         recyclerViewSets();
         init();
@@ -67,7 +74,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         titleFragment.setText(title);
 
         TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
-        String subtitle = "Numar total de poze: " + allImagesForBook.size();
+        String subtitle = "Numar total de poze: " + "0";
         subtitleFragment.setText(subtitle);
 
         add_Image = findViewById(R.id.button_add_image);
@@ -80,19 +87,21 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
 
         RecyclerView imageRecyclerView = findViewById(R.id.recyclerView_book_images);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        ImageRecyclerViewAdapter adapter = new ImageRecyclerViewAdapter(this, allImagesForBook, this);
+        adapter = new ImageRecyclerViewAdapter(this);
 
         imageRecyclerView.setLayoutManager(layoutManager);
         imageRecyclerView.setAdapter(adapter);
     }
 
     public void getImagesFromDB() {
-        allImagesForBook = new ArrayList<>();
-
-        BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
         ImageDao imageDao = db.imageDao();
 
-        allImagesForBook = imageDao.getAllImagesForABook(book_title);
+        imageDao.getAllImagesForABook(book_title).observe(this, new Observer<List<ImageEntity>>() {
+            @Override
+            public void onChanged(List<ImageEntity> imageEntities) {
+                adapter.setImages(imageEntities);
+            }
+        });
     }
 
     public void addImageMethod() {
@@ -171,7 +180,6 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
             public void run() {
                 try {
 
-                    BookZoneDatabase db = BookZoneDatabase.getAppDatabase(getApplicationContext());
                     ImageDao imageDao = db.imageDao();
                     imageDao.insertImage(new ImageEntity(contentUri, book_title));
 
@@ -184,10 +192,17 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         thread.start();
     }
 
+    public Uri getImageAtPosition(int position) {
+        ImageEntity image = db.imageDao().getImage(position + 1);
+
+        return image.getUriPath();
+    }
+
     @Override
     public void onItemListener(int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("IMAGE_PATH", String.valueOf(allImagesForBook.get(position).getUriPath()));
+
+        bundle.putString("IMAGE_PATH", String.valueOf(getImageAtPosition(position)));
 
         ImageFragment imageFragment = new ImageFragment();
         imageFragment.setArguments(bundle);
