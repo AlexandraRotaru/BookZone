@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.example.bookzone.BookZoneDatabase;
 import com.example.bookzone.Dao.BookDao;
 import com.example.bookzone.Dao.UserDao;
 import com.example.bookzone.Entities.BookEntity;
+import com.example.bookzone.Entities.UserEntity;
 import com.example.bookzone.Fragments.LoadImageFragment;
 import com.example.bookzone.R;
 import com.example.bookzone.Utils.ItemListener;
@@ -29,15 +31,13 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
 
     private static final String KEY_TITLE = "com.example.bookzone.key.title";
 
+    private TextView titleFragment;
+    private TextView subtitleFragment;
     private static Button add_book;
-
-    private String firstname;
-    private String lastname;
+    private LiveData<List<BookEntity>> allBooks;
 
     private BookZoneDatabase db;
-
     BookRecyclerViewAdapter adapter;
-    TextView subtitleFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +55,7 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
 
         getUserData();
 
-        TextView titleFragment = findViewById(R.id.textView_titleFragment);
-        String title = firstname + " " + lastname;
-        titleFragment.setText(title);
-
+        titleFragment = findViewById(R.id.textView_titleFragment);
         subtitleFragment = findViewById(R.id.textView_subtitleFragment);
 
         add_book = findViewById(R.id.button_addBook);
@@ -66,11 +63,23 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     }
 
     public void getUserData() {
-        UserDao userDao = db.userDao();
+        new Thread() {
+            @Override
+            public void run() {
+                UserDao userDao = db.userDao();
+                UserEntity userEntity = userDao.getUser();
+                String mFirstname = userEntity.getFirstname();
+                String mLastname = userEntity.getLastname();
 
-        firstname = userDao.getUser().getFirstname();
-        lastname = userDao.getUser().getLastname();
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String mName = mFirstname + " " + mLastname;
+                        titleFragment.setText(mName);
+                    }
+                });
+            }
+        }.start();
     }
 
     public void recyclerViewSets() {
@@ -85,15 +94,29 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     }
 
     public void getBooksFromDB() {
-        db.bookDao().getAllBooks().observe(this, new Observer<List<BookEntity>>() {
+        new Thread() {
             @Override
-            public void onChanged(List<BookEntity> bookEntities) {
-                String mData = "Numar total de poze: " + bookEntities.size();
-                subtitleFragment.setText(mData);
+            public void run() {
+                LiveData<List<BookEntity>> mData = db.bookDao().getAllBooks();
 
-                adapter.setBooks(bookEntities);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        allBooks = mData;
+
+                        allBooks.observeForever(new Observer<List<BookEntity>>() {
+                            @Override
+                            public void onChanged(List<BookEntity> bookEntities) {
+                                String mData = "Numar total de poze: " + bookEntities.size();
+                                subtitleFragment.setText(mData);
+
+                                adapter.setBooks(bookEntities);
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }.start();
     }
 
     private void addBookMethod() {

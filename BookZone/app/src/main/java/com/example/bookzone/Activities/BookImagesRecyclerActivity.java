@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -50,8 +51,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     private String currentPhotoPath;
     private Uri contentUri;
     private BookZoneDatabase db;
-
-    private int numberofPic = 0;
+    private LiveData<List<ImageEntity>> allImages;
 
     TextView subtitleFragment;
 
@@ -97,15 +97,29 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     }
 
     public void getImagesFromDB() {
-        db.imageDao().getAllImagesForABook(book_title).observe(this, new Observer<List<ImageEntity>>() {
+        new Thread() {
             @Override
-            public void onChanged(List<ImageEntity> imageEntities) {
-                String mData = "Numar total de poze: " + imageEntities.size();
-                subtitleFragment.setText(mData);
+            public void run() {
+                LiveData<List<ImageEntity>> mData =  db.imageDao().getAllImagesForABook(book_title);
 
-                adapter.setImages(imageEntities);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        allImages = mData;
+
+                        allImages.observeForever(new Observer<List<ImageEntity>>() {
+                            @Override
+                            public void onChanged(List<ImageEntity> imageEntities) {
+                                String mData = "Numar total de poze: " + imageEntities.size();
+                                subtitleFragment.setText(mData);
+
+                                adapter.setImages(imageEntities);
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }.start();
     }
 
     public void addImageMethod() {
@@ -127,6 +141,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(this.getBaseContext().getPackageManager()) != null) {
             // Create the File where the photo should go
@@ -179,7 +194,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     }
 
     private void saveToDB() {
-        Thread thread = new Thread() {
+        new Thread() {
             @Override
             public void run() {
                 try {
@@ -191,14 +206,11 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
                     throw e;
                 }
             }
-        };
-
-        thread.start();
+        }.start();
     }
 
     public Uri getImageForAPosition(int position) {
         ImageEntity image = db.imageDao().getImage(book_title, position + 1);
-
         return image.getUriPath();
     }
 
