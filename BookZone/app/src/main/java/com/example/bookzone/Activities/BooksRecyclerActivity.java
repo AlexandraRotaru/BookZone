@@ -37,6 +37,7 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
     private BookZoneDatabase db;
 
     BookRecyclerViewAdapter adapter;
+    TextView subtitleFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,9 +59,7 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         String title = firstname + " " + lastname;
         titleFragment.setText(title);
 
-        TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
-        String subtitle = "Numar total de poze: " + getNumberOfBooks();
-        subtitleFragment.setText(subtitle);
+        subtitleFragment = findViewById(R.id.textView_subtitleFragment);
 
         add_book = findViewById(R.id.button_addBook);
         addBookMethod();
@@ -89,15 +88,13 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
         db.bookDao().getAllBooks().observe(this, new Observer<List<BookEntity>>() {
             @Override
             public void onChanged(List<BookEntity> bookEntities) {
+                String mData = "Numar total de poze: " + bookEntities.size();
+                subtitleFragment.setText(mData);
+
                 adapter.setBooks(bookEntities);
             }
         });
     }
-
-    public int getNumberOfBooks() {
-        return  db.bookDao().numberOfBooks();
-    }
-
 
     private void addBookMethod() {
         add_book.setOnClickListener(new View.OnClickListener() {

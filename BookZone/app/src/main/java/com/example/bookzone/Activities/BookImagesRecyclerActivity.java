@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,10 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     private Uri contentUri;
     private BookZoneDatabase db;
 
+    private int numberofPic = 0;
+
+    TextView subtitleFragment;
+
     ImageRecyclerViewAdapter adapter;
 
     @Override
@@ -73,9 +78,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         String title = book_title;
         titleFragment.setText(title);
 
-        TextView subtitleFragment = findViewById(R.id.textView_subtitleFragment);
-        String subtitle = "Numar total de poze: " + getNumberOfPic();
-        subtitleFragment.setText(subtitle);
+        subtitleFragment = findViewById(R.id.textView_subtitleFragment);
 
         add_Image = findViewById(R.id.button_add_image);
         addImageMethod();
@@ -97,15 +100,13 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         db.imageDao().getAllImagesForABook(book_title).observe(this, new Observer<List<ImageEntity>>() {
             @Override
             public void onChanged(List<ImageEntity> imageEntities) {
+                String mData = "Numar total de poze: " + imageEntities.size();
+                subtitleFragment.setText(mData);
+
                 adapter.setImages(imageEntities);
             }
         });
     }
-
-    public int getNumberOfPic() {
-        return db.imageDao().getNumberOfPic(book_title);
-    }
-
 
     public void addImageMethod() {
         add_Image.setOnClickListener(new View.OnClickListener() {
