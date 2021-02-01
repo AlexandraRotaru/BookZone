@@ -70,14 +70,11 @@ public class LoadImageFragment extends Fragment {
     }
 
     private void closeFragmentMethod() {
+        Fragment frag = this;
         closeFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager()
-                        .beginTransaction()
-                        .remove(LoadImageFragment.this)
-                        .commit();
-
+                getFragmentManager().beginTransaction().detach(frag).commit();
                 BooksRecyclerActivity.setAdd_book();
             }
         });
@@ -185,6 +182,7 @@ public class LoadImageFragment extends Fragment {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
+
         File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */

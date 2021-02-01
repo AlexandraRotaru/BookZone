@@ -156,6 +156,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
                 Uri photoURI = FileProvider.getUriForFile(this.getBaseContext(),
                         "com.example.bookzone.android.fileprovider",
                         photoFile);
+
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);

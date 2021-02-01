@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:text="Book Title"
             android:textSize="13sp"
+            android:maxEms="20"
             android:textColor="#2d2d2d"
             android:gravity="center"/>
 

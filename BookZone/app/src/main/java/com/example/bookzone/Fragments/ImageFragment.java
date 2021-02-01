@@ -1,5 +1,6 @@
 package com.example.bookzone.Fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.bookzone.Activities.BookImagesRecyclerActivity;
 import com.example.bookzone.R;
 
 public class ImageFragment extends Fragment {
@@ -41,10 +43,11 @@ public class ImageFragment extends Fragment {
     }
 
     private void closeFragmentMethod() {
+        Fragment frag = this;
         closeFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().remove(ImageFragment.this).commit();
+                getFragmentManager().beginTransaction().detach(frag).commit();
             }
         });
     }
