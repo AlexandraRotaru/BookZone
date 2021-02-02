@@ -144,6 +144,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
 
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(this.getBaseContext().getPackageManager()) != null) {
+
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -182,6 +183,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
+
         File storageDir = this.getBaseContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -189,7 +191,6 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
                 storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }

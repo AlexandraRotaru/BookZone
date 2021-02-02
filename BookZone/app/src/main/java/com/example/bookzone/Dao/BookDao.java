@@ -21,9 +21,6 @@ public interface BookDao {
     @Query("SELECT * FROM (SELECT * FROM Books ORDER BY idBook DESC LIMIT :position) ORDER BY idBook LIMIT 1")
     BookEntity getBookByPosition(int position);
 
-    @Query("SELECT count(*) FROM Books")
-    int numberOfBooks();
-
     @Insert
     void insertBook(BookEntity book);
 }

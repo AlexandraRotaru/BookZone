@@ -22,6 +22,9 @@ public interface ImageDao {
     @Query("SELECT COUNT(*) FROM Images WHERE book_title = :title")
     int getNumberOfPic(String title);
 
+    @Query("DELETE FROM Images WHERE picture = :picturePath")
+    void deletePicture(String picturePath);
+
     @Insert
     void insertImage(ImageEntity image);
 }

@@ -74,7 +74,7 @@ public class LoadImageFragment extends Fragment {
         closeFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().detach(frag).commit();
+                getFragmentManager().beginTransaction().remove(frag).commit();
                 BooksRecyclerActivity.setAdd_book();
             }
         });
@@ -142,8 +142,10 @@ public class LoadImageFragment extends Fragment {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -151,11 +153,13 @@ public class LoadImageFragment extends Fragment {
             } catch (Exception e) {
                 //
             }
+
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
                         "com.example.bookzone.android.fileprovider",
                         photoFile);
+
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
@@ -167,12 +171,15 @@ public class LoadImageFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == CAMERA_REQUEST_CODE && resultCode == BooksRecyclerActivity.RESULT_OK) {
             File f = new File(currentPhotoPath);
-            bookLoadImage.setImageURI(Uri.fromFile(f));
 
+            // save the picture in gallery
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             contentUri = Uri.fromFile(f);
             mediaScanIntent.setData(contentUri);
             getContext().sendBroadcast(mediaScanIntent);
+
+            bookLoadImage.setImageURI(contentUri);
+
 
         }
     }
