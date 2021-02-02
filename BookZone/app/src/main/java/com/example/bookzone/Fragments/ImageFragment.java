@@ -1,6 +1,5 @@
 package com.example.bookzone.Fragments;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,11 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.bookzone.Activities.BookImagesRecyclerActivity;
 import com.example.bookzone.BookZoneDatabase;
 import com.example.bookzone.R;
 
-import java.io.File;
 
 public class ImageFragment extends Fragment {
 
