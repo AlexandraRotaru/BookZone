@@ -3,7 +3,6 @@ package com.example.bookzone.Fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,17 +72,6 @@ public class ImageFragment extends Fragment {
                         db.imageDao().deletePicture(pathImage);
 
                         getFragmentManager().beginTransaction().remove(frag).commit();
-
-                        try {
-                            File f = new File(pathImage );
-                            f.delete();
-
-                           // Log.d("DELETE", String.valueOf(f.exists()));
-
-                        } catch (Exception e) {
-                            throw e;
-                        }
-
                     }
                 }.start();
             }
