@@ -107,7 +107,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
                     public void run() {
                         allImages = mData;
 
-                        allImages.observeForever(new Observer<List<ImageEntity>>() {
+                        allImages.observe(BookImagesRecyclerActivity.this, new Observer<List<ImageEntity>>() {
                             @Override
                             public void onChanged(List<ImageEntity> imageEntities) {
                                 String mData = "Numar total de poze: " + imageEntities.size();

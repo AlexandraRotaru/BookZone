@@ -104,10 +104,10 @@ public class BooksRecyclerActivity extends AppCompatActivity implements ItemList
                     public void run() {
                         allBooks = mData;
 
-                        allBooks.observeForever(new Observer<List<BookEntity>>() {
+                        allBooks.observe(BooksRecyclerActivity.this, new Observer<List<BookEntity>>() {
                             @Override
                             public void onChanged(List<BookEntity> bookEntities) {
-                                String mData = "Numar total de poze: " + bookEntities.size();
+                                String mData = "Numar total de carti: " + bookEntities.size();
                                 subtitleFragment.setText(mData);
 
                                 adapter.setBooks(bookEntities);
