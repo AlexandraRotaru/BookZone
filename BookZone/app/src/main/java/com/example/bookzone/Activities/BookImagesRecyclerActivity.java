@@ -49,7 +49,6 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
     private String book_title;
     private Button add_Image;
     private String currentPhotoPath;
-    private Uri contentUri;
     private BookZoneDatabase db;
     private LiveData<List<ImageEntity>> allImages;
 
@@ -154,6 +153,7 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
+
                 Uri photoURI = FileProvider.getUriForFile(this.getBaseContext(),
                         "com.example.bookzone.android.fileprovider",
                         photoFile);
@@ -172,9 +172,8 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == BooksRecyclerActivity.RESULT_OK) {
 
             File f = new File(currentPhotoPath);
-            contentUri = Uri.fromFile(f);
 
-            saveToDB();
+            saveToDB(Uri.fromFile(f));
         }
     }
 
@@ -192,10 +191,11 @@ public class BookImagesRecyclerActivity extends AppCompatActivity implements Ite
         );
 
         currentPhotoPath = image.getAbsolutePath();
+
         return image;
     }
 
-    private void saveToDB() {
+    private void saveToDB(Uri contentUri) {
         new Thread() {
             @Override
             public void run() {

@@ -180,7 +180,6 @@ public class LoadImageFragment extends Fragment {
 
             bookLoadImage.setImageURI(contentUri);
 
-
         }
     }
 
