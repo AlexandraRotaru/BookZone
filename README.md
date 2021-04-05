@@ -1,7 +1,7 @@
 # BookZone
 
-BookZone is an app where you can keep al images in structurated images-file.
-This as useful for students and also for readers.
+BookZone is an app where you can keep all images in structurated images-file.
+This is useful for students and also for readers.
 
 # App features
 - Sign in with name
